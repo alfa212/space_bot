@@ -111,7 +111,9 @@ updater = Updater(os.getenv('TELEGRAM_BOT_TOKEN'))
 
 bot = telegram.Bot(token=os.getenv('TELEGRAM_BOT_TOKEN'))
 
-bot.send_message(chat_id='@dvmntest', text="Привет")
+# bot.send_message(chat_id='@dvmntest', text="Привет")
+
+bot.send_photo(chat_id='@dvmntest', photo=open('images/spacex0.jpg', 'rb'))
 
 # updater.dispatcher.add_handler(CommandHandler('hello', hello))
 #
