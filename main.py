@@ -43,10 +43,11 @@ if __name__ == '__main__':
     timeout = int(os.getenv('PHOTO_POST_TIMEOUT', 86400))
 
     while True:
-        if os.path.exists(spacex_dir) and\
-                os.path.exists(nasa_photos_dir) and\
-                os.path.exists(nasa_epics_dir) and\
-                len(listdir(spacex_dir) + listdir(nasa_photos_dir) + listdir(nasa_epics_dir)) > 0:
+        all_dirs_exist = os.path.exists(spacex_dir) and os.path.exists(nasa_photos_dir) and os.path.exists(
+            nasa_epics_dir)
+        dirs_images_num = len(listdir(spacex_dir) + listdir(nasa_photos_dir) + listdir(nasa_epics_dir))
+
+        if all_dirs_exist and dirs_images_num > 0:
             post_photo(tg_token, timeout, target_channel, spacex_dir, nasa_photos_dir, nasa_epics_dir)
         else:
             fetch_spacex.fetch_spacex_last_launch(spacex_api, spacex_dir)
