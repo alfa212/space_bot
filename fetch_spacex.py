@@ -16,7 +16,7 @@ def fetch_spacex_last_launch(url, dirname):
     for launch in reversed(all_launches):
         launch_photos = launch['links']['flickr_images']
 
-        if len(launch_photos) > 0:
+        if launch_photos:
             break
 
     for photo_num, photo_link in enumerate(launch_photos):
