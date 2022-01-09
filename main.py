@@ -17,7 +17,7 @@ def post_photo(token, pause, channel, *dirs):
             with open(f'{dir}/{photo}', 'rb') as photo_file:
                 bot.send_photo(chat_id=channel, photo=photo_file)
 
-            os.remove(os.path.join(os.path.abspath(os.path.dirname(__file__)), f'{dir}/{photo}'))
+            os.remove(f'{dir}/{photo}')
             time.sleep(pause)
 
 
@@ -40,10 +40,7 @@ if __name__ == '__main__':
 
     target_channel = os.getenv('TARGET_CHANNEL')
 
-    if os.getenv('PHOTO_POST_TIMEOUT'):
-        timeout = int(os.getenv('PHOTO_POST_TIMEOUT'))
-    else:
-        timeout = 86400
+    timeout = int(os.getenv('PHOTO_POST_TIMEOUT', 86400))
 
     while True:
         if os.path.exists(spacex_dir) and\
