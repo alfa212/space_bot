@@ -1,6 +1,4 @@
 from pathlib import Path
-from os.path import splitext
-from urllib.parse import urlparse
 
 import requests
 
