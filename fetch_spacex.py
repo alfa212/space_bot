@@ -9,19 +9,19 @@ def fetch_spacex_last_launch(url, dirname):
     response = requests.get(url)
     response.raise_for_status()
 
-    all_info = response.json()
+    all_launches = response.json()
 
     Path(dirname).mkdir(exist_ok=True)
 
-    for i in reversed(all_info):
-        pics_list = i['links']['flickr_images']
+    for launch in reversed(all_launches):
+        launch_photos = launch['links']['flickr_images']
 
-        if len(pics_list) > 0:
+        if len(launch_photos) > 0:
             break
 
-    for i, n in enumerate(pics_list):
-        response = requests.get(n)
+    for photo_num, photo_link in enumerate(launch_photos):
+        response = requests.get(photo_link)
         response.raise_for_status()
 
-        with open(f'{dirname}/spacex{i}.jpg', 'wb') as file:
+        with open(f'{dirname}/spacex{photo_num}.jpg', 'wb') as file:
             file.write(response.content)

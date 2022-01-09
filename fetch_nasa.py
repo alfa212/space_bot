@@ -14,20 +14,20 @@ def fetch_nasa_photos(url, apikey, max_img_count, dirname):
     response = requests.get(url, params=payload)
     response.raise_for_status()
 
-    all_info = response.json()
+    all_photos_desc = response.json()
 
     Path(dirname).mkdir(exist_ok=True)
 
-    for i, n in enumerate(all_info):
-        if "hdurl" not in n:
+    for photo_num, photo_arr in enumerate(all_photos_desc):
+        if "hdurl" not in photo_arr:
             continue
 
-        response = requests.get(n["hdurl"])
+        response = requests.get(photo_arr["hdurl"])
         response.raise_for_status()
 
-        pic_ext = splitext(urlparse(n["hdurl"]).path)[1]
+        pic_ext = splitext(urlparse(photo_arr["hdurl"]).path)[1]
 
-        with open(f'{dirname}/nasa{i}{pic_ext}', 'wb') as file:
+        with open(f'{dirname}/nasa{photo_num}{pic_ext}', 'wb') as file:
             file.write(response.content)
 
 
@@ -39,18 +39,18 @@ def fetch_nasa_epics(url, apikey, dirname):
     response = requests.get(url, params=payload)
     response.raise_for_status()
 
-    all_info = response.json()
+    all_photos_desc = response.json()
 
     Path(dirname).mkdir(exist_ok=True)
 
-    for i in range(0, len(all_info)):
-        date = all_info[i]['date']
-        image = all_info[i]['image']
+    for photo_num in range(0, len(all_photos_desc)):
+        date = all_photos_desc[photo_num]['date']
+        image = all_photos_desc[photo_num]['image']
 
         link = f"https://api.nasa.gov/EPIC/archive/natural/{date[:4]}/{date[5:7]}/{date[8:10]}/png/{image}.png?api_key={apikey}"
 
         response = requests.get(link)
         response.raise_for_status()
 
-        with open(f'{dirname}/nasa_epic{i}.png', 'wb') as file:
+        with open(f'{dirname}/nasa_epic{photo_num}.png', 'wb') as file:
             file.write(response.content)
