@@ -1,6 +1,7 @@
 from pathlib import Path
 from os.path import splitext
 from urllib.parse import urlparse
+from datetime import datetime
 
 import requests
 
@@ -44,12 +45,12 @@ def fetch_nasa_epics(url, apikey, dirname):
     Path(dirname).mkdir(exist_ok=True)
 
     for photo_num in range(0, len(all_photos_desc)):
-        date = all_photos_desc[photo_num]['date']
+        date = datetime.fromisoformat(all_photos_desc[photo_num]['date'])
         image = all_photos_desc[photo_num]['image']
 
-        link = f"https://api.nasa.gov/EPIC/archive/natural/{date[:4]}/{date[5:7]}/{date[8:10]}/png/{image}.png?api_key={apikey}"
+        link = f"https://api.nasa.gov/EPIC/archive/natural/{date:%Y}/{date:%m}/{date:%d}/png/{image}.png"
 
-        response = requests.get(link)
+        response = requests.get(link, params=payload)
         response.raise_for_status()
 
         with open(f'{dirname}/nasa_epic{photo_num}.png', 'wb') as file:
