@@ -46,23 +46,10 @@ PHOTO_POST_TIMEOUT=10
 
 Когда все фото будут опубликованы и, соответственно, в папках не останется ни одной фотографии для публикации, бот автоматически скачает новые фотографии с серверов Nasa и SpaceX и начнет публиковать их.
 
-Если вы не хотите, чтобы после публикации фото удалялось, вы можете в файле `main.py` удалить строку 
+Если вы не хотите, чтобы после публикации фото удалялось, вы можете в файле `.env` в корневой папке приложения указать `N` в поле `REMOVE_PHOTO`. По умолчанию используется значение `Y` - фото удаляются.
 
-``` python
-os.remove(os.path.join(os.path.abspath(os.path.dirname(__file__)), f'{i}/{k}'))
 ```
-
-в функции
-
-``` python
-def post_photo(token, pause, channel, *dirs):
-    bot = telegram.Bot(token=token)
-
-    for i in dirs:
-        for k in listdir(i):
-            bot.send_photo(chat_id=channel, photo=open(f'{i}/{k}', 'rb'))
-            os.remove(os.path.join(os.path.abspath(os.path.dirname(__file__)), f'{i}/{k}'))
-            time.sleep(pause)
+REMOVE_PHOTO='N'
 ```
 
 но обратите внимание - если фото не будут удаляться, бот никогда не скачает новые фото - публикация зациклится. Т.е. бот будет публиковать скачанные при первом запуске фото по кругу.

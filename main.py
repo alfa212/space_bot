@@ -12,12 +12,14 @@ import fetch_nasa
 def post_photo(token, pause, channel, *dirs):
     bot = telegram.Bot(token=token)
 
+    remove_photo = os.getenv('REMOVE_PHOTO', 'Y')
+
     for dir in dirs:
         for photo in listdir(dir):
             with open(f'{dir}/{photo}', 'rb') as photo_file:
                 bot.send_photo(chat_id=channel, photo=photo_file)
-
-            os.remove(f'{dir}/{photo}')
+            if remove_photo == 'Y':
+                os.remove(f'{dir}/{photo}')
             time.sleep(pause)
 
 
