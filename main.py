@@ -58,5 +58,3 @@ if __name__ == '__main__':
             fetch_spacex.fetch_spacex_last_launch(spacex_api, spacex_dir)
             fetch_nasa.fetch_nasa_photos(nasa_photos_api, nasa_api_key, nasa_photos_max_count, nasa_photos_dir)
             fetch_nasa.fetch_nasa_epics(nasa_epics_api, nasa_api_key, nasa_epics_dir)
-
-print(os.path.exists('images'))
