@@ -9,16 +9,14 @@ import fetch_spacex
 import fetch_nasa
 
 
-def post_photo(token, pause, channel, *dirs):
+def post_photo(token, pause, channel, remove, *dirs):
     bot = telegram.Bot(token=token)
-
-    remove_photo = os.getenv('REMOVE_PHOTO', 'Y')
 
     for dir in dirs:
         for photo in listdir(dir):
             with open(f'{dir}/{photo}', 'rb') as photo_file:
                 bot.send_photo(chat_id=channel, photo=photo_file)
-            if remove_photo == 'Y':
+            if remove == 'Y':
                 os.remove(f'{dir}/{photo}')
             time.sleep(pause)
 
@@ -44,13 +42,15 @@ if __name__ == '__main__':
 
     timeout = int(os.getenv('PHOTO_POST_TIMEOUT', 86400))
 
+    remove_photo = os.getenv('REMOVE_PHOTO', 'Y')
+
     while True:
         all_dirs_exist = os.path.exists(spacex_dir) and os.path.exists(nasa_photos_dir) and os.path.exists(
             nasa_epics_dir)
         dirs_images_num = len(listdir(spacex_dir) + listdir(nasa_photos_dir) + listdir(nasa_epics_dir))
 
         if all_dirs_exist and dirs_images_num > 0:
-            post_photo(tg_token, timeout, target_channel, spacex_dir, nasa_photos_dir, nasa_epics_dir)
+            post_photo(tg_token, timeout, target_channel, remove_photo, spacex_dir, nasa_photos_dir, nasa_epics_dir)
         else:
             fetch_spacex.fetch_spacex_last_launch(spacex_api, spacex_dir)
             fetch_nasa.fetch_nasa_photos(nasa_photos_api, nasa_api_key, nasa_photos_max_count, nasa_photos_dir)
