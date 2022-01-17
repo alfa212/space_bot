@@ -45,14 +45,11 @@ if __name__ == '__main__':
     remove_photo = os.getenv('REMOVE_PHOTO', 'Y')
 
     while True:
-        all_dirs_exist = os.path.exists(spacex_dir) and os.path.exists(nasa_photos_dir) and os.path.exists(
-            nasa_epics_dir)
-        dirs_images_num = len(listdir(spacex_dir) + listdir(nasa_photos_dir) + listdir(nasa_epics_dir))
+        try:
+            1 / len(listdir(spacex_dir) + listdir(nasa_photos_dir) + listdir(nasa_epics_dir))
 
-        if all_dirs_exist and dirs_images_num > 0:
             post_photo(tg_token, timeout, target_channel, remove_photo, spacex_dir, nasa_photos_dir, nasa_epics_dir)
-        else:
+        except (FileNotFoundError, ZeroDivisionError):
             fetch_spacex.fetch_spacex_last_launch(spacex_api, spacex_dir)
             fetch_nasa.fetch_nasa_photos(nasa_photos_api, nasa_api_key, nasa_photos_max_count, nasa_photos_dir)
             fetch_nasa.fetch_nasa_epics(nasa_epics_api, nasa_api_key, nasa_epics_dir)
-
