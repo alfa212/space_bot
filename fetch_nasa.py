@@ -44,9 +44,9 @@ def fetch_nasa_epics(url, apikey, dirname):
 
     Path(dirname).mkdir(exist_ok=True)
 
-    for photo_num in range(0, len(all_photos_desc)):
-        date = datetime.fromisoformat(all_photos_desc[photo_num]['date'])
-        image = all_photos_desc[photo_num]['image']
+    for photo_num, photo_desc in enumerate(all_photos_desc):
+        date = datetime.fromisoformat(photo_desc['date'])
+        image = photo_desc['image']
 
         link = f"https://api.nasa.gov/EPIC/archive/natural/{date:%Y}/{date:%m}/{date:%d}/png/{image}.png"
 
